@@ -43,12 +43,18 @@ class Calculator {
 
     square() {
         let computation;
-
         const current = parseFloat(this.currentOperand);
-        computation = Math.sqrt(current)
-        this.currentOperand = computation;
-        this.operation = undefined;
-        this.previousOperand = '';
+        if(current<0){
+            this.currentOperand = "Wrong Number"
+            this.operation = undefined;
+            this.previousOperand = '';
+        }else{
+            computation = Math.sqrt(current)
+            this.currentOperand = computation;
+            this.operation = undefined;
+            this.previousOperand = computation;
+        }
+
     }
 
 
@@ -77,7 +83,7 @@ class Calculator {
                 return;
         }
         this.readyToReset = true;
-        this.currentOperand = computation;
+        this.currentOperand = parseFloat(computation.toFixed(15));
         this.operation = undefined;
         this.previousOperand = '';
     }
@@ -104,7 +110,11 @@ class Calculator {
     }
 
     updateDisplay() {
-        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand)
+        if (this.currentOperand === "Wrong Number"){
+            this.currentOperandTextElement.innerText = "Wrong Number"
+        }else {
+            this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand)
+        }
         if (this.operation != null) {
             this.previousOperandTextElement.innerText =
                 `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
@@ -163,5 +173,4 @@ deleteButton.addEventListener('click', button => {
 operationSquare.addEventListener('click', function () {
     calculator.square()
     calculator.updateDisplay()
-    calculator.clear()
 })
